@@ -15,15 +15,14 @@ import org.springframework.stereotype.Component;
 public class DataInitialization {
     @Value("${api.url}")
     private String url;
-    private HttpClient httpClient;
-    private CharacterMapper characterMapper;
-    private CharacterRepository characterRepository;
+    private final HttpClient httpClient;
+    private final CharacterMapper characterMapper;
+    private final CharacterRepository characterRepository;
 
     @PostConstruct
     public void loadDataToDb() {
         ApiResponseDto apiResponseDto = httpClient.get(url, ApiResponseDto.class);
-        List<Character> characters =
-                apiResponseDto.getCharacterApiResponseDto()
+        List<Character> characters = apiResponseDto.getCharacterApiResponseDto()
                 .stream()
                 .map(characterMapper::toModel)
                 .toList();
